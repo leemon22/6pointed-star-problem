@@ -1,0 +1,1 @@
+# 6pointed-star-problem
