@@ -1,54 +1,5 @@
 from itertools import permutations
 
-def rotar(solucion):
-    pos0 = solucion.index(0)
-    if pos0%2 == 1:
-        pos0-=1
-    sol_rotada = []
-    for i in range(12):
-        d = solucion[(i+pos0)%12]
-        sol_rotada.append(d)
-    return tuple(sol_rotada)
-
-# Función que aplica una reflexión en el eje con dirección pasando por el 0 y el centro
-# Se supone que el 0 esta en las posiciones 0 o 1
-def reflejar(solucion):
-    s = list(solucion)
-    pos0 = solucion.index(0)
-    if pos0 == 0:
-        for i in range(1,6):
-            s[i], s[12-i] = s[12-i], s[i]
-    else:
-        s[0], s[2] = s[2], s[0]
-        for i in range(1,5):
-            s[7-i], s[7+i] = s[7+i], s[7-i]
-    return tuple(s)
-
-# Formateo la solucion de tal forma que el 1 está entre los 6 primeros valores
-# Si el 1 está en la esquina opuesta del 0, el 2 debe estar en los 5 primeros
-def formatear(solucion):
-    solucion = rotar(solucion)
-    pos0 = solucion.index(0)
-    if pos0 == 0:
-        pos1 = solucion.index(1)
-        if pos1 > 6:
-            solucion = reflejar(solucion)
-        elif pos1 == 6:
-            pos2 = solucion.index(2)
-            if pos2 > 6:
-                solucion = reflejar(solucion)
-    if pos0 == 1:
-        pos1 = solucion.index(1)
-        if pos1 > 7 or pos1==0:
-            solucion = reflejar(solucion)
-        elif pos1 == 7:
-            pos2 = solucion.index(2)
-            if pos2 > 7 or pos2==0:
-                solucion = reflejar(solucion)
-    return solucion
-
-conjunto_soluciones = set()
-
 # a,b deben pertenecer a por lo menos 1 linea para que
 # tenga sentido la operacion
 def resolver_hueco(a,b,conjunto_lineas):
@@ -89,10 +40,15 @@ def resolver_una(a,b,c,d,conjunto_lineas):
 
     return (a,b,bc,c,d,cd,y,y_cd,ad,x_ab,x,ab)
 
+conjunto_soluciones = []
 def resolver_varias(conjunto_lineas):
-    cl = conjunto_lineas[0]
     # Condiciones iniciales
-    for perm in permutations(cl, 4):
+    a, *resto = conjunto_lineas[0]
+    perms = []
+    for (b,c,d) in permutations(resto, 3):
+        perms.append((a,b,c,d))
+        perms.append((b,a,c,d))
+    for perm in perms:
         (a,b,c,d) = perm
         if resolver_hueco(a,b,conjunto_lineas) == None:
             continue
@@ -102,9 +58,9 @@ def resolver_varias(conjunto_lineas):
             continue
         elif resolver_hueco(c,d,conjunto_lineas) == None:
             continue
+        # Resolvemos
         solucion = resolver_una(a,b,c,d,conjunto_lineas)
-        solucion = formatear(solucion)
-        conjunto_soluciones.add(solucion)
+        conjunto_soluciones.append(solucion)
 
 def resolver(conjuntos_lineas):
     for conjunto_lineas in conjuntos_lineas:

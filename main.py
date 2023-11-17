@@ -1,18 +1,17 @@
 from calcular_cuadruplas import calcular_cuadruplas
 from calcular_lineas_compatibles import calcular_lineas_compatibles
 from calcular_soluciones import resolver
+from time import time_ns
+
+t_inicio = time_ns()
 
 cuadruplas = calcular_cuadruplas()
-print(f"{len(cuadruplas)} cuadruplas")
-for t in cuadruplas:
-    print(t)
-
 conjuntos_lineas = calcular_lineas_compatibles(cuadruplas)
-print(f"{len(conjuntos_lineas)} conjuntos de líneas compatibles")
-for t in conjuntos_lineas:
-    print(t)
-
 soluciones = resolver(conjuntos_lineas)
-print(f"{len(soluciones)} soluciones")
+
+t_fin = time_ns()
+t_total = (t_fin - t_inicio)/10**6
+
+print(f"{len(soluciones)} soluciones en {t_total} ms")
 for sol in soluciones:
     print(sol)

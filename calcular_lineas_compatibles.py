@@ -1,4 +1,3 @@
-
 conjuntos_solucion = []
 memoria_de_cota = [0 for _ in range(12)]
 solucion_incompleta = []
