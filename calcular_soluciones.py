@@ -1,5 +1,37 @@
 from itertools import permutations
 
+# Nos aseguramos que las soluciones son únicas
+def reflejar(solucion):
+    sol = list(solucion)
+    if sol[0] == 0:
+        for i in range(1,5):
+            sol[i], sol[12-i] = sol[12-i], sol[i]
+    else:
+        sol[0], sol[2] = sol[2], sol[0]
+        for i in range(1,4):
+            sol[7+i], sol[7-i] = sol[7-i], sol[7+i]
+    return tuple(sol)
+
+def formatear(solucion):
+    # buscamos poner el 1 a la derecha del 0
+    pos1 = solucion.index(1)
+    if solucion[0] == 0:
+        if pos1 > 6:
+            solucion = reflejar(solucion)
+        elif pos1 == 6:
+            # si el 1 es el opuesto del 0 en la estrella, entonces ponemos el 2 a la derecha del 0
+            pos2 = solucion.index(2)
+            if pos2 > 6:
+                solucion = reflejar(solucion)
+    else:
+        if pos1 > 7 or pos1 == 0:
+            solucion = reflejar(solucion)
+        elif pos1 == 7:
+            pos2 = solucion.index(2)
+            if pos2 > 7 or pos2 == 0:
+                solucion = reflejar(solucion)
+    return solucion
+
 # a,b deben pertenecer a por lo menos 1 linea para que
 # tenga sentido la operacion
 def resolver_hueco(a,b,conjunto_lineas):
@@ -60,6 +92,7 @@ def resolver_varias(conjunto_lineas):
             continue
         # Resolvemos
         solucion = resolver_una(a,b,c,d,conjunto_lineas)
+        solucion = formatear(solucion)
         conjunto_soluciones.append(solucion)
 
 def resolver(conjuntos_lineas):

@@ -12,6 +12,10 @@ soluciones = resolver(conjuntos_lineas)
 t_fin = time_ns()
 t_total = (t_fin - t_inicio)/10**6
 
+soluciones = sorted(soluciones)
+
 print(f"{len(soluciones)} soluciones en {t_total} ms")
+i = 0
 for sol in soluciones:
-    print(sol)
+    print(f"solución número {i}: {sol}")
+    i+=1
