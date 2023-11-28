@@ -54,6 +54,82 @@ Dado un conjunto de líneas que cumple las condiciones impuestas en el paso ante
 
 #### Resolver Hueco:
 Dada una línea $l$, tomemos dos elementos $a,b \in l$. Entonces resolver hueco consiste en tomar la otra línea en la que aparece $a$, la otra línea en la que aparece $b$ y hacer la intersección. Esta intersección puede ser vacía si las líneas son paralelas, o contiene un único elemento si se cruzan.
+Esta operación es claramente conmutativa. Vamos a denotarla como $a*b$.
 
-### Resolver Línea:
+#### Resolver Línea:
 Dado elementos $a,b,c$, resolver línea consiste en localizar la línea $l$ tal que $a,b,c \in l$ y obtener el elemento $d \in l$ tal que $d \not= a,b,c$. Si no existe dicha $l$, definimos el resultado como vacío.
+Esta operación también es conmutativa y la denotaremos como $[a,b,c]$.
+
+#### Condiciones iniciales
+
+Para cada conjunto de líneas, podemos ordenar la primera línea de $4! = 24$ formas diferentes, pero esto nos daría soluciones repetidas ya que aparecerían reflexiones. Luego fijaremos que el 0 esté en la posición 0 o en la 1, luego nos quedan 12 posibles soluciones por cada conjunto de líneas. Si la primera línea la ordenamos como $(a,b,d,e)$, he comprobado por fuerza bruta que si existen $a*b,a*e,b*d,d*e$, entonces puedo resolver la estrella de la siguiente forma:
+- $c = b*d$
+- $l = a*b$
+- $f = d*e$
+- $i = a*e$
+- $k = [b,c,l]$
+- $g = [c,d,f]$
+- $j = k*l$
+- $h = f*g$
+
+La solución se muestra entonces en formato `(a,b,c,d,e,d,e,f,g,h,i,j,k,l)`, donde estos valores representan el siguiente esquema:
+```
+      c
+     / \
+a---b---d---e
+ \ /     \ /
+  l       f
+ / \     / \
+k---j---h---g
+     \ /
+      i
+```
+
+Antes de devolver estas soluciones, se aplican las reflexiones necesarias para que se muestre en uno de los sigientes cuatro formatos:
+```
+      1
+     / \
+0---1---1---1
+ \ /     \ /
+  x       1
+ / \     / \
+x---x---x---x
+     \ /
+      x
+
+      2
+     / \
+0---2---2---2
+ \ /     \ /
+  x       2
+ / \     / \
+x---x---x---1
+     \ /
+      x
+
+      1
+     / \
+x---0---1---1
+ \ /     \ /
+  x       1
+ / \     / \
+x---x---x---1
+     \ /
+      x
+
+      2
+     / \
+x---0---2---2
+ \ /     \ /
+  x       2
+ / \     / \
+x---x---1---2
+     \ /
+      x
+
+```
+En este formato:
+- Si un número está repetido, esto significa que debe estar en algunas de las posiciones donde aparece.
+- Las x simbolizan cualquier otro número.
+
+De esta manera se tiene todas las 80 soluciones únicas a este problema.
