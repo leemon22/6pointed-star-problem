@@ -1,6 +1,7 @@
 from itertools import permutations
 
-# Nos aseguramos que las soluciones son únicas
+# Aplicamos una reflexión distinta dependiendo si el 0 está en la posición 0 o 1
+# El eje de reflexión pasa por el 0 y el centro de la estrella
 def reflejar(solucion):
     sol = list(solucion)
     if sol[0] == 0:
@@ -12,6 +13,7 @@ def reflejar(solucion):
             sol[7+i], sol[7-i] = sol[7-i], sol[7+i]
     return tuple(sol)
 
+# Le damos el formato descrito en el README.md
 def formatear(solucion):
     # buscamos poner el 1 a la derecha del 0
     pos1 = solucion.index(1)
@@ -33,7 +35,7 @@ def formatear(solucion):
     return solucion
 
 # a,b deben pertenecer a por lo menos 1 linea para que
-# tenga sentido la operacion
+# tenga sentido la operacion. Invito a hacer esta operación más eficiente.
 def resolver_hueco(a,b,conjunto_lineas):
     sa = set()
     sb = set()
@@ -58,6 +60,7 @@ def resolver_linea(a,b,c,conjunto_lineas):
             s.remove(c)
             return s.pop()
 
+# Algoritmo para resolver una estrella dadas las condiciones iniciales y el conjunto de líneas.
 def resolver_una(a,b,c,d,conjunto_lineas):
     ab = resolver_hueco(a,b,conjunto_lineas)
     bc = resolver_hueco(b,c,conjunto_lineas)
@@ -72,9 +75,18 @@ def resolver_una(a,b,c,d,conjunto_lineas):
 
     return (a,b,bc,c,d,cd,y,y_cd,ad,x_ab,x,ab)
 
+# Lista de soluciones. Modificado por resolver_varias y devuelto al main por resolver.
+# Si no estás seguro de que las soluciones no son únicas transformalo en un set.
 conjunto_soluciones = []
+
+# Obtengo todas las posibles soluciones
 def resolver_varias(conjunto_lineas):
-    # Condiciones iniciales
+    # Condiciones iniciales.
+    # Nos aseguramos de que las soluciones sean únicas, es decir, que no haya soluciones
+    # repetidas al darles formato. Tenemos en cuenta que las líneas están ordenadas en el 
+    # conjunto de líneas, por lo que la primera línea empieza forzosamente por 0.
+    # Metemos dicho 0 en la posición 0 o 1 de la línea de condiciones iniciales y generamos
+    # el resto de permutaciones iniciales en dicha línea.
     a, *resto = conjunto_lineas[0]
     perms = []
     for (b,c,d) in permutations(resto, 3):
@@ -82,6 +94,8 @@ def resolver_varias(conjunto_lineas):
         perms.append((b,a,c,d))
     for perm in perms:
         (a,b,c,d) = perm
+        # Si no podemos aplicar la operación resolver_hueco en estos casos, no podemos sacar
+        # una solución
         if resolver_hueco(a,b,conjunto_lineas) == None:
             continue
         elif resolver_hueco(a,d,conjunto_lineas) == None:
@@ -90,12 +104,14 @@ def resolver_varias(conjunto_lineas):
             continue
         elif resolver_hueco(c,d,conjunto_lineas) == None:
             continue
-        # Resolvemos
+        # Fin de las condiciones iniciales, resolvemos, damos formato y guardamos.
         solucion = resolver_una(a,b,c,d,conjunto_lineas)
         solucion = formatear(solucion)
         conjunto_soluciones.append(solucion)
 
+# Devuelve una lista con todas las soluciones
 def resolver(conjuntos_lineas):
+    # Para cada conjunto de líneas obtengo todas las soluciones posibles
     for conjunto_lineas in conjuntos_lineas:
         resolver_varias(conjunto_lineas)
     return conjunto_soluciones
