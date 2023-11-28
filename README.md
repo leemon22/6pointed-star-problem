@@ -38,7 +38,7 @@ $2(a+b+c+d+e+f+g+h+i+j+k) = 2(\sum_{n=0}^{11} n) = 2 \frac{(11(11+1)}{2} = 11 ·
 
 Luego la suma de cualquiera de las líneas es 22.
 
-En esta fase obtendremos las líneas, cuádruplas de números,tales que la suma de todos sus elementos da 22. En código esto se traducirá en tener tuplas `(a,b,c,d)` de cuatro elementos, que son números del 0 al 11 distintos entre sí, tales que $a+b+c+d=22$. Para optimizar esta búsqueda, impondremos que $a<b<c<d$.
+En esta fase obtendremos las líneas, cuádruplas de números,tales que la suma de todos sus elementos da 22. En código esto se traducirá en tener tuplas `(a,b,c,d)` de cuatro elementos, que son números del 0 al 11 distintos entre sí, tales que $a+b+c+d=22$. Para optimizar esta búsqueda, impondremos que $a < b < c < d$.
 En esta fase salen 33 cuadruplas.
 
 ### Conjuntos de 6 líneas
